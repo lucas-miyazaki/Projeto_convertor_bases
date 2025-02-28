@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Bases</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="converter-container">
+        <div class="selectors">
+            <select id="base-origem">
+                <option value="null">Selecione uma base</option>
+                <option value="bin">Binário</option>
+                <option value="dec">Decimal</option>
+                <option value="hex">Hexadecimal</option>
+                <option value="oct">Octal</option>
+            </select>
+            <select id="base-destino">
+                <option value="null">Selecione uma base</option>
+                <option value="bin">Binário</option>
+                <option value="dec">Decimal</option>
+                <option value="hex">Hexadecimal</option>
+                <option value="oct">Octal</option>
+            </select>
+        </div>
+        <div class="inputs">
+            <input type="text" id="numero" placeholder="Número">
+            <input type="text" id="resultado" placeholder="Resultado" readonly>
+        </div>
+        <button onclick="converter()">Converter</button>
+    </section>
+
+    <script>
+        function converter() {
+            let numero = document.getElementById("numero").value.trim();
+            let baseOrigem = document.getElementById("base-origem").value;
+            let baseDestino = document.getElementById("base-destino").value;
+            
+            let bases = { "bin": 2, "dec": 10, "hex": 16, "oct": 8 };
+
+            if (baseOrigem === "null" || baseDestino === "null") {
+                alert("Por favor, selecione as bases corretamente.");
+                return;
+            }
+
+            if (!numero) {
+                alert("Por favor, insira um número válido.");
+                return;
+            }
+
+            try {
+                let numeroDecimal = parseInt(numero, bases[baseOrigem]);
+                if (isNaN(numeroDecimal)) {
+                    throw new Error("Número inválido para a base selecionada.");
+                }
+
+                fetch(`http://127.0.0.1:5000/converter/${numero}/${bases[baseOrigem]}/${bases[baseDestino]}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.erro) {
+                            alert(data.erro);
+                        } else {
+                            document.getElementById("resultado").value = "Resultado: " + data.resultado;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert("Erro ao converter número. Verifique se o servidor está rodando.");
+                    });
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    </script>
+</body>
+</html>
