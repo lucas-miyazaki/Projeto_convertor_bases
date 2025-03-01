@@ -11,17 +11,21 @@
         <div class="selectors">
             <select id="base-origem">
                 <option value="null">Selecione uma base</option>
-                <option value="bin">Binário</option>
-                <option value="dec">Decimal</option>
-                <option value="hex">Hexadecimal</option>
-                <option value="oct">Octal</option>
+                <option value="bin">Binário - base 2</option>
+                <option value="ter">Ternária - base 3</option>
+                <option value="qui">Quinária - base 5</option>
+                <option value="oct">Octal - base 8</option>
+                <option value="dec">Decimal - base 10</option>
+                <option value="hex">Hexadecimal - base 16</option>
             </select>
             <select id="base-destino">
                 <option value="null">Selecione uma base</option>
-                <option value="bin">Binário</option>
-                <option value="dec">Decimal</option>
-                <option value="hex">Hexadecimal</option>
-                <option value="oct">Octal</option>
+                <option value="bin">Binário - base 2</option>
+                <option value="ter">Ternária - base 3</option>
+                <option value="qui">Quinária - base 5</option>
+                <option value="oct">Octal - base 8</option>
+                <option value="dec">Decimal - base 10</option>
+                <option value="hex">Hexadecimal - base 16</option>
             </select>
         </div>
         <div class="inputs">
@@ -37,7 +41,7 @@
             let baseOrigem = document.getElementById("base-origem").value;
             let baseDestino = document.getElementById("base-destino").value;
             
-            let bases = { "bin": 2, "dec": 10, "hex": 16, "oct": 8 };
+            let bases = { "bin": 2, "ter": 3, "qui": 5, "dec": 10, "hex": 16, "oct": 8 };
 
             if (baseOrigem === "null" || baseDestino === "null") {
                 alert("Por favor, selecione as bases corretamente.");
