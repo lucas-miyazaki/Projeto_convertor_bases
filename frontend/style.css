@@ -1,48 +1,100 @@
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
+    background-color: #f8f9fa;
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #87CEEB; /* Ainda não sei que bomba de cor vou colocar  */
-}
-
-.converter-container {
-    background: #0099FF; /* Ainda não sei que bomba de cor vou colocar  */
+    min-height: 100vh;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+h1 {
+    color: #4361ee;
+    margin-bottom: 1.5rem;
     text-align: center;
-    width: 400px;
-    border: 3px solid black;
 }
 
-.selectors, .inputs {
+.selectors {
     display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    gap: 10px;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-select, input {
+select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+input {
     width: 100%;
     padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #005A9C;
+    padding: 12px;
+    background-color: #4361ee;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 10px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #003F6F;
+    background-color: #3f37c9;
+}
+
+.mensagem {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    display: none;
+}
+
+.erro {
+    background-color: #ffcccc;
+    color: #cc0000;
+}
+
+.sucesso {
+    background-color: #ccffcc;
+    color: #006600;
+}
+
+@media (max-width: 500px) {
+    .selectors {
+        flex-direction: column;
+    }
 }
