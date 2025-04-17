@@ -1,82 +1,243 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor de Bases</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Conversor de Bases Numéricas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #4361ee;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .selectors {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3f37c9;
+        }
+
+        .mensagem {
+            margin-top: 1rem;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+
+        .erro {
+            background-color: #ffcccc;
+            color: #cc0000;
+        }
+
+        .sucesso {
+            background-color: #ccffcc;
+            color: #006600;
+        }
+
+        @media (max-width: 500px) {
+            .selectors {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <section class="converter-container">
+    <div class="container">
+        <h1>Conversor de Bases</h1>
+        
         <div class="selectors">
             <select id="base-origem">
-                <option value="null">Selecione uma base</option>
-                <option value="bin">Binário - base 2</option>
-                <option value="ter">Ternária - base 3</option>
-                <option value="qui">Quinária - base 5</option>
-                <option value="oct">Octal - base 8</option>
-                <option value="dec">Decimal - base 10</option>
-                <option value="hex">Hexadecimal - base 16</option>
+                <option value="null">Base de origem</option>
+                <option value="2" selected>Binário (2)</option>
+                <option value="3">Ternário (3)</option>
+                <option value="5">Quinário (5)</option>
+                <option value="8">Octal (8)</option>
+                <option value="10">Decimal (10)</option>
+                <option value="16">Hexadecimal (16)</option>
             </select>
+            
             <select id="base-destino">
-                <option value="null">Selecione uma base</option>
-                <option value="bin">Binário - base 2</option>
-                <option value="ter">Ternária - base 3</option>
-                <option value="qui">Quinária - base 5</option>
-                <option value="oct">Octal - base 8</option>
-                <option value="dec">Decimal - base 10</option>
-                <option value="hex">Hexadecimal - base 16</option>
+                <option value="null">Base de destino</option>
+                <option value="2">Binário (2)</option>
+                <option value="3">Ternário (3)</option>
+                <option value="5">Quinário (5)</option>
+                <option value="8">Octal (8)</option>
+                <option value="10" selected>Decimal (10)</option>
+                <option value="16">Hexadecimal (16)</option>
             </select>
         </div>
+        
         <div class="inputs">
-            <input type="text" id="numero" placeholder="Número">
+            <input type="text" id="numero" placeholder="Digite o número">
             <input type="text" id="resultado" placeholder="Resultado" readonly>
         </div>
+        
         <button onclick="converter()">Converter</button>
-    </section>
+        
+        <div id="mensagem" class="mensagem"></div>
+    </div>
 
     <script>
         function converter() {
-            let numero = document.getElementById("numero").value.trim();
-            let baseOrigem = document.getElementById("base-origem").value;
-            let baseDestino = document.getElementById("base-destino").value;
+            const numero = document.getElementById("numero").value.trim().toUpperCase();
+            const baseOrigem = parseInt(document.getElementById("base-origem").value);
+            const baseDestino = parseInt(document.getElementById("base-destino").value);
+            const resultadoInput = document.getElementById("resultado");
+            const mensagemDiv = document.getElementById("mensagem");
             
-            let bases = { "bin": 2, "ter": 3, "qui": 5, "dec": 10, "hex": 16, "oct": 8 };
-
-            if (baseOrigem === "null" || baseDestino === "null") {
-                alert("Por favor, selecione as bases corretamente.");
+            // Limpar mensagens anteriores
+            mensagemDiv.style.display = "none";
+            mensagemDiv.className = "mensagem";
+            
+            // Validar seleção das bases
+            if (isNaN(baseOrigem) || isNaN(baseDestino)) {
+                mostrarMensagem("Selecione as bases de origem e destino", "erro");
                 return;
             }
-
+            
+            // Validar entrada
             if (!numero) {
-                alert("Por favor, insira um número válido.");
+                mostrarMensagem("Digite um número para converter", "erro");
                 return;
             }
-
+            
             try {
-                let numeroDecimal = parseInt(numero, bases[baseOrigem]);
-                if (isNaN(numeroDecimal)) {
-                    throw new Error("Número inválido para a base selecionada.");
+                // Validar caracteres para a base de origem
+                if (!validarNumero(numero, baseOrigem)) {
+                    mostrarMensagem(`Número inválido para base ${baseOrigem}`, "erro");
+                    return;
                 }
-
-                fetch(`http://127.0.0.1:5000/converter/${numero}/${bases[baseOrigem]}/${bases[baseDestino]}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.erro) {
-                            alert(data.erro);
-                        } else {
-                            document.getElementById("resultado").value = "Resultado: " + data.resultado;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro:', error);
-                        alert("Erro ao converter número. Verifique se o servidor está rodando.");
-                    });
-
-            } catch (error) {
-                alert(error.message);
+                
+                // Converter para decimal
+                const decimal = parseInt(numero, baseOrigem);
+                
+                // Verificar se a conversão foi bem sucedida
+                if (isNaN(decimal)) {
+                    mostrarMensagem("Erro na conversão. Verifique o número digitado.", "erro");
+                    return;
+                }
+                
+                // Converter para a base de destino
+                const resultado = decimal.toString(baseDestino).toUpperCase();
+                
+                // Mostrar resultado
+                resultadoInput.value = resultado;
+                mostrarMensagem("Conversão realizada com sucesso!", "sucesso");
+                
+            } catch (erro) {
+                mostrarMensagem("Erro na conversão. Verifique os dados inseridos.", "erro");
+                console.error(erro);
             }
         }
+        
+        function validarNumero(numero, base) {
+            // Caracteres válidos para cada base
+            const caracteresValidos = {
+                2: "01",
+                3: "012",
+                5: "01234",
+                8: "01234567",
+                10: "0123456789",
+                16: "0123456789ABCDEF"
+            };
+            
+            // Se a base não estiver definida, retorna falso
+            if (!caracteresValidos[base]) {
+                return false;
+            }
+            
+            // Conjunto de caracteres válidos para a base
+            const caracteres = caracteresValidos[base];
+            
+            // Verificar cada caractere do número
+            for (let i = 0; i < numero.length; i++) {
+                if (caracteres.indexOf(numero[i]) === -1) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        function mostrarMensagem(texto, tipo) {
+            const mensagemDiv = document.getElementById("mensagem");
+            mensagemDiv.textContent = texto;
+            mensagemDiv.className = `mensagem ${tipo}`;
+            mensagemDiv.style.display = "block";
+        }
+        
+        // Enter para converter
+        document.getElementById("numero").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                converter();
+            }
+        });
     </script>
 </body>
 </html>
