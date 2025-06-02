@@ -37,8 +37,7 @@ def decimalParaBase(num, base, param=None):
             for key, value in param.items():
                 i = str(i).replace(key, value)
             final += i
-
-    return final if final else "0"  # Retorna "0" caso o número seja zero
+    return final
 
 def baseParaDecimal(num, base, parms={}):
     split_num = list(reversed(list(num)))
@@ -47,10 +46,12 @@ def baseParaDecimal(num, base, parms={}):
     try:
         base = int(base)
         for i in split_num:
-            i = parms[i]
+            if i in parms:
+                i = parms[i]
             final += int(i)*(pow(base, currentSplit))
             currentSplit+=1
     except ValueError:
         raise ValueError(f"Número inválido '{num}' para a base {base}") #Só acontece caso a base seja maior que o número informado.
+    print(final)
     return final
     
