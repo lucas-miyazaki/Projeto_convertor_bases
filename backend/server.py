@@ -17,8 +17,8 @@ def api_call_db(numero, base1, base2):
         if base1 == 1 or base2 == 1:
             return jsonify({"erro": "Base 1 não é aceita"}), 400
 
-        result1 = baseParaDecimal(numero, base1)
-        resultado = decimalParaBase(result1, base2, readConfig("config.txt"))
+        result1 = baseParaDecimal(numero, base1, readConfig("config.txt")[1])
+        resultado = decimalParaBase(result1, base2, readConfig("config.txt")[0])
         return jsonify({"resultado": resultado})
 
 if __name__ == "__main__":

@@ -1,22 +1,20 @@
 import os
 
 def readConfig(filename):
-    if not os.path.exists(filename):
-        return {}  # Retorna um dicionário vazio se o arquivo não existir
-
     param = []
+    revParam = {}
     defined_param = {}
-    with open(filename, "r") as f:
-        undParm = f.read().strip().split("\n")
+    with open(filename, "r") as f:  
+        undParm = f.read().split("\n")
         for i in undParm:
-            if "=" in i:
-                param.append(i.split("="))
-    
+            param.append(i.split("="))
     for i in param:
-        if len(i) == 2:
-            defined_param[i[1]] = i[0]
-
-    return defined_param if defined_param else None
+        defined_param[i[1]] = i[0]
+        revParam[i[0]] = i[1]
+    if defined_param == {}:
+        defined_param = None
+        revParam = None
+    return [defined_param, revParam]
 
 def decimalParaBase(num, base, param=None):
     num = int(num)
@@ -40,6 +38,7 @@ def decimalParaBase(num, base, param=None):
     return final
 
 def baseParaDecimal(num, base, parms={}):
+    print(parms)
     split_num = list(reversed(list(num)))
     currentSplit = 0
     final = 0
@@ -48,10 +47,10 @@ def baseParaDecimal(num, base, parms={}):
         for i in split_num:
             if i in parms:
                 i = parms[i]
+            print(i)
             final += int(i)*(pow(base, currentSplit))
             currentSplit+=1
     except ValueError:
         raise ValueError(f"Número inválido '{num}' para a base {base}") #Só acontece caso a base seja maior que o número informado.
     print(final)
     return final
-    
